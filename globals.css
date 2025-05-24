@@ -1,0 +1,260 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Add these styles to ensure consistent text wrapping and overflow handling */
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Ensure dialog components are always visible and properly layered */
+.command-palette-container,
+.favorites-dialog-container,
+.share-dialog-container {
+  z-index: 50 !important;
+}
+
+/* Fix border radius consistency - with higher specificity and !important */
+.rounded-lg,
+.card,
+.chat-input,
+.send-button,
+.chat-message,
+[class*="rounded-lg"],
+.concerns-prompt > div,
+.quick-facts-container,
+.calculator-container,
+.command-palette-container,
+.favorites-dialog-container,
+.share-dialog-container,
+div[class*="rounded-lg"],
+button[class*="rounded-lg"],
+input[class*="rounded-lg"] {
+  border-radius: 0.5rem !important;
+}
+
+.rounded-full,
+.rounded-full-force,
+[class*="rounded-full"],
+div[class*="rounded-full"],
+button[class*="rounded-full"] {
+  border-radius: 9999px !important;
+}
+
+/* Force border-radius on specific elements */
+input,
+button,
+.card,
+.chat-message > div,
+.chat-container > div,
+.concerns-prompt > div,
+.quick-facts-container,
+.calculator-container {
+  border-radius: 0.5rem !important;
+}
+
+/* Ensure border-radius is applied even with other styles */
+html body .rounded-lg,
+html body .card,
+html body .chat-input,
+html body .send-button,
+html body .chat-message > div {
+  border-radius: 0.5rem !important;
+}
+
+html body .rounded-full,
+html body .rounded-full-force {
+  border-radius: 9999px !important;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .input-area {
+    padding: 0.75rem;
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0));
+  }
+
+  .chat-input {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 0.75rem;
+  }
+
+  .helper-text {
+    font-size: 0.65rem;
+  }
+
+  /* Ensure placeholder text is visible on small screens */
+  input::placeholder {
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}
+
+/* Fix for iOS input zoom */
+@supports (-webkit-touch-callout: none) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  input::placeholder {
+    font-size: 14px !important;
+    opacity: 0.8;
+  }
+
+  /* Fix for mobile devices to ensure proper viewport height */
+  .h-screen,
+  .min-h-screen {
+    height: -webkit-fill-available;
+  }
+}
+
+/* Ensure placeholder text is properly sized and visible */
+input::placeholder {
+  opacity: 0.7;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Fix for border-radius in production */
+.chat-input,
+.send-button,
+.rounded-corners {
+  border-radius: 0.5rem !important;
+  -webkit-border-radius: 0.5rem !important;
+  -moz-border-radius: 0.5rem !important;
+}
+
+.rounded-full-force {
+  border-radius: 9999px !important;
+  -webkit-border-radius: 9999px !important;
+  -moz-border-radius: 9999px !important;
+}
+
+/* Ensure scrollbars are consistent across browsers */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(75, 85, 99, 0.5) rgba(31, 41, 55, 0.5);
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(31, 41, 55, 0.5);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(75, 85, 99, 0.5);
+  border-radius: 4px;
+}
+
+/* Ensure images don't overflow their containers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix for iOS safe area insets */
+.input-area {
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0));
+}
