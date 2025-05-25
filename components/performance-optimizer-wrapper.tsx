@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import dynamic from "next/dynamic"
+// import dynamic from "next/dynamic" // No longer needed for PerformanceOptimizer
 
-// Dynamically import the performance optimizer with no SSR
-const PerformanceOptimizer = dynamic(() => import("@/components/performance-optimizer"), {
-  ssr: false,
-})
+// Dynamically import the performance optimizer with no SSR - REMOVED
+// const PerformanceOptimizer = dynamic(() => import("@/components/performance-optimizer"), {
+//   ssr: false,
+// })
 
 export default function PerformanceOptimizerWrapper() {
   const [isMounted, setIsMounted] = useState(false)
@@ -28,10 +28,10 @@ export default function PerformanceOptimizerWrapper() {
               entry.target.classList.add("animate-visible")
 
               // Optional: unobserve after animation is triggered
-              if (entry.target.dataset.once === "true") {
+              if (entry.target instanceof HTMLElement && entry.target.dataset.once === "true") {
                 observer.unobserve(entry.target)
               }
-            } else if (entry.target.dataset.once !== "true") {
+            } else if (entry.target instanceof HTMLElement && entry.target.dataset.once !== "true") {
               // Only remove the class if we want exit animations and not set to once
               entry.target.classList.remove("animate-visible")
             }
@@ -62,7 +62,10 @@ export default function PerformanceOptimizerWrapper() {
     }
   }, [])
 
-  if (!isMounted) return null
+  if (!isMounted) return null // This component now does nothing if PerformanceOptimizer is removed
+                               // and only setupScrollAnimations was its purpose.
+                               // Consider moving setupScrollAnimations to a more relevant component or hook if this wrapper becomes empty.
 
-  return <PerformanceOptimizer />
+  // return <PerformanceOptimizer /> // PerformanceOptimizer was removed
+  return null // Or return children if it's meant to wrap content: return <>{children}</>;
 }

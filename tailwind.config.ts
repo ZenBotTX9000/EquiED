@@ -34,8 +34,8 @@ const config: Config = {
           foreground: "hsl(var(--muted-foreground))",
         },
         accent: {
-          DEFAULT: "#700936",
-          light: "#9c1c4e",
+          DEFAULT: "hsl(var(--accent))", // Changed to use CSS variable
+          light: "#9c1c4e", // Kept as is, might be a specific shade
           foreground: "hsl(var(--accent-foreground))",
         },
         destructive: {

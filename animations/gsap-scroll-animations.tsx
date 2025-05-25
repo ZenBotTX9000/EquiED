@@ -4,6 +4,7 @@ import { useEffect, useRef, type ReactNode } from "react"
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { cn } from "@/lib/utils"
+import { durations, easings } from "./animation-config"
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -28,7 +29,7 @@ export function GSAPFadeIn({
   children,
   className,
   delay = 0,
-  duration = 0.8,
+  duration = durations.slow,
   start = "top bottom-=100",
   end = "bottom top+=100",
   markers = false,
@@ -36,7 +37,7 @@ export function GSAPFadeIn({
   once = true,
 }: BaseScrollAnimationProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<ScrollTrigger>()
+  const triggerRef = useRef<ScrollTrigger | null>(null)
 
   useEffect(() => {
     const element = ref.current
@@ -50,7 +51,7 @@ export function GSAPFadeIn({
       autoAlpha: 1,
       duration: scrub ? 0 : duration,
       delay: scrub ? 0 : delay,
-      ease: "power2.out",
+      ease: easings.smooth,
       overwrite: "auto",
     })
 
@@ -85,7 +86,7 @@ export function GSAPSlideIn({
   children,
   className,
   delay = 0,
-  duration = 0.8,
+  duration = durations.slow,
   start = "top bottom-=100",
   end = "bottom top+=100",
   markers = false,
@@ -98,7 +99,7 @@ export function GSAPSlideIn({
   distance?: number
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<ScrollTrigger>()
+  const triggerRef = useRef<ScrollTrigger | null>(null)
 
   useEffect(() => {
     const element = ref.current
@@ -122,7 +123,7 @@ export function GSAPSlideIn({
       autoAlpha: 1,
       duration: scrub ? 0 : duration,
       delay: scrub ? 0 : delay,
-      ease: "power2.out",
+      ease: easings.smooth,
       overwrite: "auto",
     })
 
@@ -157,7 +158,7 @@ export function GSAPScaleIn({
   children,
   className,
   delay = 0,
-  duration = 0.8,
+  duration = durations.slow,
   start = "top bottom-=100",
   end = "bottom top+=100",
   markers = false,
@@ -168,7 +169,7 @@ export function GSAPScaleIn({
   from?: number
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<ScrollTrigger>()
+  const triggerRef = useRef<ScrollTrigger | null>(null)
 
   useEffect(() => {
     const element = ref.current
@@ -186,7 +187,7 @@ export function GSAPScaleIn({
       autoAlpha: 1,
       duration: scrub ? 0 : duration,
       delay: scrub ? 0 : delay,
-      ease: "power2.out",
+      ease: easings.smooth,
       overwrite: "auto",
     })
 
@@ -221,7 +222,7 @@ export function GSAPTextReveal({
   text,
   className,
   delay = 0,
-  duration = 0.8,
+  duration = durations.slow,
   start = "top bottom-=100",
   end = "bottom top+=100",
   markers = false,
@@ -233,7 +234,7 @@ export function GSAPTextReveal({
   stagger?: number
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<ScrollTrigger>()
+  const triggerRef = useRef<ScrollTrigger | null>(null)
   const words = text.split(" ")
 
   useEffect(() => {
@@ -256,7 +257,7 @@ export function GSAPTextReveal({
       duration: scrub ? 0 : duration,
       delay: scrub ? 0 : delay,
       stagger: scrub ? 0 : stagger,
-      ease: "power2.out",
+      ease: easings.textReveal, // Using textReveal as it's more specific
       overwrite: "auto",
     })
 
@@ -307,7 +308,7 @@ export function GSAPParallax({
   markers?: boolean
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<ScrollTrigger>()
+  const triggerRef = useRef<ScrollTrigger | null>(null)
 
   useEffect(() => {
     const element = ref.current
@@ -369,7 +370,7 @@ export function GSAPHorizontalScroll({
   pin?: boolean
 }) {
   const ref = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<ScrollTrigger>()
+  const triggerRef = useRef<ScrollTrigger | null>(null)
 
   useEffect(() => {
     const element = ref.current

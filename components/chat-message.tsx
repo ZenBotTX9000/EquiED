@@ -1,6 +1,7 @@
 "use client"
 
-import { motion, useReducedMotion } from "framer-motion"
+import React from "react" // Added explicit React import
+// import { motion, useReducedMotion } from "framer-motion" // Commenting out for simplification
 import { Bot, User, Copy, Check, AlertTriangle, Star, StarOff, Share2 } from "lucide-react"
 import type { Message } from "./chat-interface"
 import ReactMarkdown from "react-markdown"
@@ -37,7 +38,7 @@ const ChatMessage = memo(function ChatMessage({
   const contentRef = useRef<HTMLDivElement>(null)
 
   // Check if user prefers reduced motion
-  const prefersReducedMotion = useReducedMotion()
+  const prefersReducedMotion = false; // Set to false as useReducedMotion is commented out
 
   // Use GSAP for animations
   useGSAP(() => {
@@ -234,27 +235,20 @@ const ChatMessage = memo(function ChatMessage({
     }
   }, [prefersReducedMotion, isUser])
 
+  // const MotionDiv = motion.div; // Workaround commented out
+
   return (
-    <motion.div
+    <div // Ensuring this is a plain div
       ref={messageRef}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      variants={containerVariants}
+      // Removing Framer Motion props
       className={cn("flex items-start gap-3 p-1", isUser && "justify-end", className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      layout="position"
       data-message-id={message.id}
     >
       {!isUser && (
-        <div
+        <div // Ensuring this is a plain div
           className="flex-shrink-0 bg-gradient-to-r from-[#700936] to-[#9c1c4e] p-2 rounded-full shadow-lg"
-          style={{ borderRadius: "9999px !important" }}
-          variants={iconVariants}
-          whileHover={
-            prefersReducedMotion ? {} : { scale: 1.05, rotate: [0, -5, 5, -5, 0], transition: { duration: 0.5 } }
-          }
         >
           {message.source === "error" ? (
             <AlertTriangle className="h-5 w-5 text-white drop-shadow-sm" />
@@ -278,7 +272,7 @@ const ChatMessage = memo(function ChatMessage({
           "prose prose-invert max-w-none break-words overflow-wrap-anywhere",
         )}
         style={{ borderRadius: "0.5rem !important", wordBreak: "break-word", overflowWrap: "break-word" }}
-        variants={messageVariants}
+        // variants={messageVariants} // Removed variants from the inner div as well
       >
         {isUser ? (
           <p>{message.content}</p>
@@ -369,64 +363,51 @@ const ChatMessage = memo(function ChatMessage({
           </div>
         )}
 
-        <motion.div
+        <div // Ensuring action buttons container is plain div
           className="mt-3 flex justify-end gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isHovered || isFavorited ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
+          style={{ opacity: isHovered || isFavorited ? 1 : 0, transition: "opacity 0.3s" }}
         >
           {!isUser && onFavorite && (
-            <motion.button
+            <button // Ensuring this is a plain button
               onClick={() => onFavorite(message)}
               className="favorite-button flex items-center gap-1 text-xs text-slate-400 hover:text-yellow-400 bg-slate-800/80 backdrop-blur-sm px-2 py-1 shadow-md rounded-corners rounded-button"
-              variants={actionButtonVariants}
-              whileHover="hover"
-              whileTap="tap"
               title={isFavorited ? "Remove from favorites" : "Add to favorites"}
             >
               {isFavorited ? <StarOff className="h-3 w-3" /> : <Star className="h-3 w-3" />}
               <span>{isFavorited ? "Unfavorite" : "Favorite"}</span>
-            </motion.button>
+            </button>
           )}
 
           {!isUser && onShare && (
-            <motion.button
+            <button // Ensuring this is a plain button
               onClick={() => onShare(message)}
               className="share-button flex items-center gap-1 text-xs text-slate-400 hover:text-blue-400 bg-slate-800/80 backdrop-blur-sm px-2 py-1 shadow-md rounded-corners rounded-button"
-              variants={actionButtonVariants}
-              whileHover="hover"
-              whileTap="tap"
               title="Share this response"
             >
               <Share2 className="h-3 w-3" />
               <span>Share</span>
-            </motion.button>
+            </button>
           )}
 
-          <motion.button
+          <button // Ensuring this is a plain button
             onClick={handleCopy}
             className="copy-button flex items-center gap-1 text-xs text-slate-400 hover:text-white bg-slate-800/80 backdrop-blur-sm px-2 py-1 shadow-md rounded-corners rounded-button"
-            variants={actionButtonVariants}
-            whileHover="hover"
-            whileTap="tap"
             title="Copy to clipboard"
           >
             {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
             <span>{copied ? "Copied" : "Copy"}</span>
-          </motion.button>
-        </motion.div>
+          </button>
+        </div>
       </div>
 
       {isUser && (
-        <motion.div
+        <div // Ensuring this is a plain div
           className="flex-shrink-0 bg-gradient-to-br from-slate-500 to-slate-600 p-2 shadow-lg rounded-full-force"
-          variants={iconVariants}
-          whileHover={prefersReducedMotion ? {} : { scale: 1.05 }}
         >
           <User className="h-5 w-5 text-white drop-shadow-sm" />
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div> // Ensuring this is a plain div
   )
 })
 

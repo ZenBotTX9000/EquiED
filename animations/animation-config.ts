@@ -138,11 +138,11 @@ export function adjustForDevice(preset: any, deviceType: "desktop" | "mobile" | 
     adjusted.stagger = 0
   }
 
-  if (adjustment.disableScale && adjusted.scale) {
+  if ("disableScale" in adjustment && adjustment.disableScale && adjusted.scale) {
     adjusted.scale = 1
   }
 
-  if (adjustment.simplifyEasing) {
+  if ("simplifyEasing" in adjustment && adjustment.simplifyEasing) {
     adjusted.ease = easings.smooth
   }
 

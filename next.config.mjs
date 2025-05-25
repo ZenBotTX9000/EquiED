@@ -1,14 +1,20 @@
+import createNextBundleAnalyzer from '@next/bundle-analyzer';
+
+const withBundleAnalyzer = createNextBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false, // Enforce ESLint during builds
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false, // Enforce TypeScript errors during builds
   },
   images: {
-    unoptimized: true,
+    unoptimized: false, // Enable Next.js image optimization
   },
-}
+};
 
-export default nextConfig
+export default withBundleAnalyzer(nextConfig);

@@ -1,8 +1,9 @@
 "use client"
 
-import { motion } from "framer-motion"
+import { motion, useMotionValue, useTransform, animate } from "framer-motion" // Added useMotionValue, useTransform, animate
 import { cn } from "@/lib/utils"
 import type { ReactNode } from "react"
+import { useEffect } from "react"; // Ensured useEffect is imported
 
 // Text that reveals character by character
 export function RevealText({
@@ -140,17 +141,19 @@ export function HighlightText({
       whileHover="hover"
     >
       <motion.span
-        className={cn("absolute bottom-0 left-0 h-[30%] w-full -z-10 bg-primary/20", highlightClassName)}
+        className={cn("absolute bottom-0 left-0 h-[30%] w-full -z-10 bg-primary/20 origin-left", highlightClassName)} // Added origin-left
         variants={{
-          initial: { width: "0%" },
-          animate: { width: "100%", transition: { duration: 0.5 } },
-          hover: { height: "100%", transition: { duration: 0.2 } },
+          initial: { scaleX: 0 }, // Changed width to scaleX
+          animate: { scaleX: 1, transition: { duration: 0.5 } }, // Changed width to scaleX
+          hover: { scaleY: 3.33, transition: { duration: 0.2 } }, // Changed height to scaleY (30% * 3.33 ~= 100%)
         }}
       />
       {children}
     </motion.span>
   )
 }
+
+// Removed duplicate Framer Motion import here
 
 // Animated counter
 export function AnimatedCounter({
@@ -166,14 +169,17 @@ export function AnimatedCounter({
   className?: string
   formatter?: (value: number) => string
 }) {
-  return (
-    <motion.span
-      className={className}
-      initial={{ count: from }}
-      animate={{ count: to }}
-      transition={{ duration, type: "spring", damping: 10 }}
-    >
-      {({ count }) => formatter(count)}
-    </motion.span>
-  )
+  const count = useMotionValue(from);
+  const rounded = useTransform(count, (latest) => formatter(latest));
+
+  useEffect(() => {
+    const controls = animate(count, to, {
+      duration,
+      type: "spring",
+      damping: 10, // Or other transition props as needed
+    });
+    return controls.stop;
+  }, [from, to, duration, count]);
+
+  return <motion.span className={className}>{rounded}</motion.span>;
 }

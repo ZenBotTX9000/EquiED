@@ -43,8 +43,9 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         ...classNames,
       }}
       components={{
+         // @ts-expect-error https://react-day-picker.js.org/api/types/CustomComponents#iconleft - TS might not be picking up the correct type for DayPicker's components prop
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+         IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />, // Removed @ts-expect-error for IconRight
       }}
       {...props}
     />

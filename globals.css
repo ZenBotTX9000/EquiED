@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
   font-family: Arial, Helvetica, sans-serif;
-}
+} */
 
 @layer utilities {
   .text-balance {
@@ -99,14 +99,15 @@ body {
   word-break: break-word;
 }
 
-/* Ensure dialog components are always visible and properly layered */
+/* Ensure dialog components are always visible and properly layered (COMMENTED OUT)
 .command-palette-container,
 .favorites-dialog-container,
 .share-dialog-container {
   z-index: 50 !important;
 }
+*/
 
-/* Fix border radius consistency - with higher specificity and !important */
+/* Fix border radius consistency - with higher specificity and !important (COMMENTED OUT)
 .rounded-lg,
 .card,
 .chat-input,
@@ -132,8 +133,9 @@ div[class*="rounded-full"],
 button[class*="rounded-full"] {
   border-radius: 9999px !important;
 }
+*/
 
-/* Force border-radius on specific elements */
+/* Force border-radius on specific elements (COMMENTED OUT)
 input,
 button,
 .card,
@@ -144,8 +146,9 @@ button,
 .calculator-container {
   border-radius: 0.5rem !important;
 }
+*/
 
-/* Ensure border-radius is applied even with other styles */
+/* Ensure border-radius is applied even with other styles (COMMENTED OUT)
 html body .rounded-lg,
 html body .card,
 html body .chat-input,
@@ -158,6 +161,7 @@ html body .rounded-full,
 html body .rounded-full-force {
   border-radius: 9999px !important;
 }
+*/
 
 /* Mobile optimizations */
 @media (max-width: 640px) {
@@ -212,7 +216,7 @@ input::placeholder {
   white-space: nowrap;
 }
 
-/* Fix for border-radius in production */
+/* Fix for border-radius in production (COMMENTED OUT)
 .chat-input,
 .send-button,
 .rounded-corners {
@@ -226,6 +230,7 @@ input::placeholder {
   -webkit-border-radius: 9999px !important;
   -moz-border-radius: 9999px !important;
 }
+*/
 
 /* Ensure scrollbars are consistent across browsers */
 * {

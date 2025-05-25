@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { motion } from "framer-motion"
-import { buttonHover, fadeIn, scaleUp, slideUp } from "@/lib/animations"
+import { buttonHover, fadeIn, scaleUp, slideUp, staggerContainer, staggerItem } from "@/animations/animations"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -87,16 +87,10 @@ export function AnimatedList({
 }) {
   return (
     <motion.ul
+      variants={staggerContainer}
       initial="initial"
       animate="animate"
       exit="exit"
-      variants={{
-        animate: {
-          transition: {
-            staggerChildren: 0.1,
-          },
-        },
-      }}
       className={className}
     >
       {children}
@@ -114,11 +108,7 @@ export function AnimatedListItem({
 }) {
   return (
     <motion.li
-      variants={{
-        initial: { opacity: 0, y: 10 },
-        animate: { opacity: 1, y: 0 },
-        exit: { opacity: 0, y: 10 },
-      }}
+      variants={staggerItem} // Use the imported staggerItem
       className={className}
     >
       {children}
@@ -134,17 +124,10 @@ export function LoadingSpinner({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
     lg: "w-12 h-12 border-4",
   }
 
+  // Relies on Tailwind's animate-spin for rotation. Framer Motion part is removed.
   return (
-    <motion.div
+    <div
       className={cn("rounded-full border-t-transparent border-primary animate-spin", sizeClasses[size])}
-      animate={{
-        rotate: 360,
-      }}
-      transition={{
-        duration: 1,
-        repeat: Number.POSITIVE_INFINITY,
-        ease: "linear",
-      }}
     />
   )
 }

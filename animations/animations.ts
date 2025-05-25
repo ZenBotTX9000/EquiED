@@ -1,13 +1,14 @@
 "use client"
 
 import type { MotionProps } from "framer-motion"
+import { durations } from "./animation-config"
 
 // Fade in animation
 export const fadeIn: MotionProps = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-  transition: { duration: 0.3 },
+  transition: { duration: durations.fast },
 }
 
 // Slide up animation
@@ -15,7 +16,7 @@ export const slideUp: MotionProps = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 20 },
-  transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+  transition: { duration: durations.fast, ease: [0.22, 1, 0.36, 1] },
 }
 
 // Slide in from right animation
@@ -23,7 +24,7 @@ export const slideInRight: MotionProps = {
   initial: { opacity: 0, x: 20 },
   animate: { opacity: 1, x: 0 },
   exit: { opacity: 0, x: -20 },
-  transition: { duration: 0.3, ease: "easeOut" },
+  transition: { duration: durations.fast, ease: "easeOut" },
 }
 
 // Scale up animation
@@ -31,7 +32,7 @@ export const scaleUp: MotionProps = {
   initial: { opacity: 0, scale: 0.95 },
   animate: { opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.95 },
-  transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] },
+  transition: { duration: durations.fast, ease: [0.22, 1, 0.36, 1] },
 }
 
 // Staggered children animation
@@ -52,7 +53,7 @@ export const staggerItem = {
   initial: { opacity: 0, y: 10 },
   animate: { opacity: 1, y: 0 },
   exit: { opacity: 0, y: 10 },
-  transition: { duration: 0.3 },
+  transition: { duration: durations.fast },
 }
 
 // Pulse animation for loading states
@@ -72,7 +73,7 @@ export const pulse = {
 export const buttonHover = {
   whileHover: { scale: 1.03 },
   whileTap: { scale: 0.97 },
-  transition: { duration: 0.2 },
+  transition: { duration: durations.veryFast },
 }
 
 // Shimmer effect for loading states
@@ -82,7 +83,7 @@ export const shimmer = {
     transition: {
       repeat: Number.POSITIVE_INFINITY,
       repeatType: "mirror",
-      duration: 2,
+      duration: durations.ultraSlow * 1.333, // Approx 2s, or define a new duration
     },
   },
 }

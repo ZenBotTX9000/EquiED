@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
-import { throttle } from "@/lib/performance"
+// import { throttle } from "@/lib/performance" // throttle removed
 
 interface PerformanceMetrics {
   fps: number
@@ -82,7 +82,7 @@ export function usePerformanceMonitoring() {
   useEffect(() => {
     if (!isDev) return
 
-    const updateMemoryInfo = throttle(() => {
+    const updateMemoryInfo = () => { // throttle removed
       if (performance && (performance as any).memory) {
         const memoryInfo = (performance as any).memory
         setMetrics((prev) => ({
@@ -94,7 +94,7 @@ export function usePerformanceMonitoring() {
           },
         }))
       }
-    }, 2000)
+    } // Removed trailing ', 2000)'
 
     updateMemoryInfo()
     const intervalId = setInterval(updateMemoryInfo, 2000)

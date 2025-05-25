@@ -5,6 +5,7 @@ import type React from "react"
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { gsap } from "gsap"
 import { cn } from "@/lib/utils"
+import { durations, easings } from "./animation-config"
 
 interface GSAPDialogProps {
   isOpen: boolean
@@ -24,7 +25,7 @@ export default function GSAPDialog({
   className,
   overlayClassName,
   contentClassName,
-  duration = 0.3,
+  duration = durations.fast,
   closeOnOverlayClick = true,
 }: GSAPDialogProps) {
   const [isVisible, setIsVisible] = useState(false)
@@ -40,11 +41,11 @@ export default function GSAPDialog({
     if (!timelineRef.current) {
       timelineRef.current = gsap
         .timeline({ paused: true })
-        .fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: duration * 0.8, ease: "power2.out" })
+        .fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: duration * 0.8, ease: easings.smooth }) // Using a general smooth ease for overlay
         .fromTo(
           contentRef.current,
           { opacity: 0, y: 20, scale: 0.95 },
-          { opacity: 1, y: 0, scale: 1, duration, ease: "power3.out" },
+          { opacity: 1, y: 0, scale: 1, duration, ease: easings.dialogOpen }, // Use dialogOpen from config
           "-=0.2", // Start slightly before overlay animation completes
         )
     }

@@ -83,7 +83,10 @@ export default function FavoritesDialog({ isOpen, onClose, onSelectFavorite }: F
           <motion.div
             className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
             onClick={onClose}
-            {...animations.fadeIn}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={animations.fadeIn.transition} // Use the whole transition object from the hook
             data-testid="favorites-dialog-overlay"
           />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
@@ -159,7 +162,14 @@ export default function FavoritesDialog({ isOpen, onClose, onSelectFavorite }: F
                 ) : (
                   <motion.div
                     className="p-2"
-                    variants={animations.staggerContainer}
+                    variants={{ // Define variants locally for clarity and type safety
+                      initial: animations.staggerContainer.initial,
+                      animate: {
+                        ...(animations.staggerContainer.animate || {}), // Spread animate props like opacity
+                        transition: animations.staggerContainer.transition, // Add stagger transition here
+                      },
+                      exit: animations.staggerContainer.exit,
+                    }}
                     initial="initial"
                     animate="animate"
                     exit="exit"
@@ -167,8 +177,10 @@ export default function FavoritesDialog({ isOpen, onClose, onSelectFavorite }: F
                     {filteredFavorites.map((favorite, index) => (
                       <motion.div
                         key={favorite.id}
-                        variants={animations.staggerItem}
-                        custom={index}
+                        initial={{ opacity: 0, y: prefersReducedMotion ? 5 : 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: prefersReducedMotion ? -5 : -10 }}
+                        transition={{ duration: prefersReducedMotion ? 0.15 : 0.3, ease: "easeOut" }}
                         className="group relative p-3 border border-slate-700/50 rounded-md mb-2 bg-slate-800/50 hover:bg-slate-700/50 transition-colors"
                         whileHover={{ x: 3, backgroundColor: "rgba(51, 65, 85, 0.5)" }}
                         whileTap={{ scale: 0.98 }}

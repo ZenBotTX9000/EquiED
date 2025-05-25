@@ -186,7 +186,10 @@ export default function CommandPalette({ isOpen, onClose, onShowCalculator, onSh
           <motion.div
             className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
             onClick={onClose}
-            {...animations.fadeIn}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={animations.fadeIn.transition} // Use the whole transition object from the hook
             data-testid="command-palette-overlay"
           />
           <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[15vh] pointer-events-none">
@@ -242,7 +245,14 @@ export default function CommandPalette({ isOpen, onClose, onShowCalculator, onSh
                 ) : (
                   <motion.div
                     className="p-2"
-                    variants={animations.staggerContainer}
+                    variants={{ // Define variants locally for clarity and type safety
+                      initial: animations.staggerContainer.initial,
+                      animate: {
+                        ...(animations.staggerContainer.animate || {}), // Spread animate props like opacity
+                        transition: animations.staggerContainer.transition, // Add stagger transition here
+                      },
+                      exit: animations.staggerContainer.exit,
+                    }}
                     initial="initial"
                     animate="animate"
                     exit="exit"
@@ -250,8 +260,10 @@ export default function CommandPalette({ isOpen, onClose, onShowCalculator, onSh
                     {filteredCommands.map((command, index) => (
                       <motion.div
                         key={command.id}
-                        variants={animations.staggerItem}
-                        custom={index}
+                        initial={{ opacity: 0, y: prefersReducedMotion ? 5 : 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: prefersReducedMotion ? -5 : -10 }}
+                        transition={{ duration: prefersReducedMotion ? 0.15 : 0.3, ease: "easeOut" }}
                         onClick={() => command.action()}
                         className={`flex items-center gap-3 p-3 rounded-md cursor-pointer transition-colors ${
                           selectedIndex === index

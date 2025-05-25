@@ -63,7 +63,10 @@ export default function ShareDialog({
           <motion.div
             className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
             onClick={onClose}
-            {...animations.fadeIn}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={animations.fadeIn.transition} // Use the whole transition object
             data-testid="share-dialog-overlay"
           />
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
@@ -121,7 +124,14 @@ export default function ShareDialog({
 
                 <motion.div
                   className="grid grid-cols-3 gap-3 mb-5"
-                  variants={animations.staggerContainer}
+                  variants={{ // Define variants locally for clarity and type safety
+                    initial: animations.staggerContainer.initial,
+                    animate: {
+                      ...(animations.staggerContainer.animate || {}),
+                      transition: animations.staggerContainer.transition,
+                    },
+                    exit: animations.staggerContainer.exit,
+                  }}
                   initial="initial"
                   animate="animate"
                   exit="exit"
@@ -129,7 +139,10 @@ export default function ShareDialog({
                   <motion.button
                     onClick={handleCopy}
                     className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-slate-700/90 to-slate-800/90 rounded-lg hover:from-slate-600/90 hover:to-slate-700/90 transition-colors shadow-md"
-                    variants={animations.staggerItem}
+                    initial={{ opacity: 0, y: prefersReducedMotion ? 5 : 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: prefersReducedMotion ? -5 : -10 }}
+                    transition={{ duration: prefersReducedMotion ? 0.15 : 0.3, ease: "easeOut" }}
                     whileHover={prefersReducedMotion ? {} : { y: -5, scale: 1.03 }}
                     whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                   >
@@ -149,7 +162,10 @@ export default function ShareDialog({
                   <motion.button
                     onClick={shareOnTwitter}
                     className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-slate-700/90 to-slate-800/90 rounded-lg hover:from-slate-600/90 hover:to-slate-700/90 transition-colors shadow-md"
-                    variants={animations.staggerItem}
+                    initial={{ opacity: 0, y: prefersReducedMotion ? 5 : 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: prefersReducedMotion ? -5 : -10 }}
+                    transition={{ duration: prefersReducedMotion ? 0.15 : 0.3, ease: "easeOut" }}
                     whileHover={prefersReducedMotion ? {} : { y: -5, scale: 1.03 }}
                     whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                   >
@@ -159,7 +175,10 @@ export default function ShareDialog({
                   <motion.button
                     onClick={shareOnFacebook}
                     className="flex flex-col items-center gap-2 p-3 bg-gradient-to-br from-slate-700/90 to-slate-800/90 rounded-lg hover:from-slate-600/90 hover:to-slate-700/90 transition-colors shadow-md"
-                    variants={animations.staggerItem}
+                    initial={{ opacity: 0, y: prefersReducedMotion ? 5 : 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: prefersReducedMotion ? -5 : -10 }}
+                    transition={{ duration: prefersReducedMotion ? 0.15 : 0.3, ease: "easeOut" }}
                     whileHover={prefersReducedMotion ? {} : { y: -5, scale: 1.03 }}
                     whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                   >

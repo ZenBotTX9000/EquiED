@@ -40,17 +40,17 @@ export default function IntroScreen() {
     },
   }
 
-  const iconAnimation = {
-    animate: {
-      scale: [1, 1.05, 1],
-      rotate: [0, 2, -2, 0],
-      transition: {
-        duration: 3,
-        repeat: Number.POSITIVE_INFINITY,
-        repeatType: "reverse",
-      },
-    },
-  }
+  // const iconAnimation = { // Define directly in the component for better type inference
+  //   animate: {
+  //     scale: [1, 1.05, 1],
+  //     rotate: [0, 2, -2, 0],
+  //     transition: {
+  //       duration: 3,
+  //       repeat: Number.POSITIVE_INFINITY,
+  //       repeatType: "reverse" as const, // Ensure literal type
+  //     },
+  //   },
+  // }
 
   const shimmerAnimation = {
     animate: {
@@ -103,7 +103,17 @@ export default function IntroScreen() {
           repeatType: "reverse",
         }}
       >
-        <motion.div {...iconAnimation}>
+        <motion.div
+          animate={{ // Apply animation directly
+            scale: [1, 1.05, 1],
+            rotate: [0, 2, -2, 0],
+            transition: {
+              duration: 3,
+              repeat: Infinity, // Using Infinity
+              repeatType: "reverse" as const, // Using "as const"
+            },
+          }}
+        >
           <Sparkles className="h-10 w-10 text-white drop-shadow-lg" />
         </motion.div>
       </motion.div>

@@ -15,7 +15,7 @@ import IntroScreen from "./intro-screen"
 import QuickFacts from "./quick-facts"
 
 // Import animation config
-import { presets, easings, durations, adjustForDevice } from "@/lib/animation-config"
+import { presets, easings, durations, adjustForDevice } from "@/animations/animation-config"
 import { getOptimizationLevel, startFrameRateMonitoring, stopFrameRateMonitoring } from "@/lib/performance-monitor"
 
 // Dynamically import heavy components
@@ -105,8 +105,8 @@ export default function ChatInterface() {
       // Use GSAP for smooth scrolling
       gsap.to(chatContainerRef.current, {
         scrollTop: chatContainerRef.current.scrollHeight,
-        duration: 0.8,
-        ease: "power3.out",
+        duration: durations.slow,
+        ease: easings.smooth,
         onComplete: () => {
           // Subtle pulse animation for the latest message
           const latestMessage = document.querySelector(".chat-message:last-child")
@@ -116,8 +116,8 @@ export default function ChatInterface() {
               { backgroundColor: "rgba(112, 9, 54, 0.05)" },
               {
                 backgroundColor: "rgba(0, 0, 0, 0)",
-                duration: 1,
-                ease: "power2.out",
+                duration: durations.verySlow,
+                ease: easings.smooth,
               },
             )
           }
@@ -188,8 +188,8 @@ export default function ChatInterface() {
               opacity: 1,
               y: 0,
               scale: 1,
-              duration: 0.4,
-              ease: "power2.out",
+              duration: durations.fast,
+              ease: easings.smooth,
             })
           },
           onLeave: () => {
@@ -197,8 +197,8 @@ export default function ChatInterface() {
               opacity: 0.5,
               y: -20,
               scale: 0.98,
-              duration: 0.3,
-              ease: "power2.in",
+              duration: durations.fast,
+              ease: easings.smoothIn,
             })
           },
           onEnterBack: () => {
@@ -206,8 +206,8 @@ export default function ChatInterface() {
               opacity: 1,
               y: 0,
               scale: 1,
-              duration: 0.4,
-              ease: "power2.out",
+              duration: durations.fast,
+              ease: easings.smooth,
             })
           },
           onLeaveBack: () => {
@@ -215,8 +215,8 @@ export default function ChatInterface() {
               opacity: 0.5,
               y: 20,
               scale: 0.98,
-              duration: 0.3,
-              ease: "power2.in",
+              duration: durations.fast,
+              ease: easings.smoothIn,
             })
           },
         })
@@ -319,8 +319,8 @@ export default function ChatInterface() {
             { scale: 1 },
             {
               scale: 1.2,
-              duration: 0.2,
-              ease: "back.out(1.5)",
+              duration: durations.veryFast,
+              ease: easings.bounceStrong,
               yoyo: true,
               repeat: 1,
             },
@@ -347,8 +347,8 @@ export default function ChatInterface() {
         {
           scale: 1.2,
           rotation: 15,
-          duration: 0.3,
-          ease: "back.out(1.5)",
+              duration: durations.fast,
+              ease: easings.bounceStrong,
           yoyo: true,
           repeat: 1,
         },
@@ -378,8 +378,8 @@ export default function ChatInterface() {
         {
           borderColor: "rgba(112, 9, 54, 0)",
           boxShadow: "0 0 0 0px rgba(112, 9, 54, 0)",
-          duration: 1,
-          ease: "power2.out",
+          duration: durations.verySlow,
+          ease: easings.smooth,
         },
       )
     }
@@ -537,8 +537,8 @@ What would you like to know about the National Equidistributed Salary model?`,
           { scale: 1 },
           {
             scale: 0.9,
-            duration: 0.1,
-            ease: "power2.out",
+            duration: durations.ultraFast,
+            ease: easings.smooth,
             yoyo: true,
             repeat: 1,
           },
@@ -632,8 +632,8 @@ What would you like to know about the National Equidistributed Salary model?`,
         { rotation: 0 },
         {
           rotation: 360,
-          duration: 0.8,
-          ease: "power2.inOut",
+              duration: durations.slow,
+              ease: easings.smoothInOut,
         },
       )
     }
@@ -643,8 +643,10 @@ What would you like to know about the National Equidistributed Salary model?`,
       const messagesToSend = messages
         .filter((m) => m.source !== "local" && m.id !== retryMessage.id)
         .concat({
+          id: Date.now().toString(), // Added id
           role: "user",
           content: retryMessage.content,
+          // source can be omitted as it's optional and this is a user message for resending
         })
 
       const controller = new AbortController()
@@ -717,8 +719,8 @@ What would you like to know about the National Equidistributed Salary model?`,
       { backgroundColor: "rgba(112, 9, 54, 0.2)" },
       {
         backgroundColor: "rgba(112, 9, 54, 0)",
-        duration: 1,
-        ease: "power2.out",
+        duration: durations.verySlow,
+        ease: easings.smooth,
       },
     )
   }, [])
@@ -839,8 +841,8 @@ What would you like to know about the National Equidistributed Salary model?`,
         { backgroundColor: "rgba(112, 9, 54, 0.1)" },
         {
           backgroundColor: "rgba(51, 65, 85, 0.9)",
-          duration: 0.8,
-          ease: "power2.out",
+          duration: durations.slow,
+          ease: easings.smooth,
         },
       )
     }
@@ -858,7 +860,7 @@ What would you like to know about the National Equidistributed Salary model?`,
         initial: { opacity: 0, y: prefersReducedMotion ? 0 : 20 },
         animate: { opacity: 1, y: 0 },
         exit: { opacity: 0, y: prefersReducedMotion ? 0 : -20 },
-        transition: { duration: prefersReducedMotion ? 0.1 : 0.4 },
+        transition: { duration: prefersReducedMotion ? 0.1 : durations.fast },
       },
       buttonAnimation: {
         whileHover: prefersReducedMotion ? {} : { scale: 1.05 },
@@ -879,7 +881,7 @@ What would you like to know about the National Equidistributed Salary model?`,
       <motion.div
         key={message.id}
         layout="position"
-        className="chat-message rounded-corners overflow-hidden"
+        className="chat-message rounded-lg overflow-hidden" // Changed .rounded-corners to rounded-lg
         data-message-id={message.id}
         {...animationConfig.messageAnimation}
         transition={{
@@ -903,8 +905,7 @@ What would you like to know about the National Equidistributed Salary model?`,
             <motion.button
               onClick={handleRetry}
               disabled={isLoading}
-              className="retry-button flex items-center gap-1 text-xs bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white px-3 py-1.5 rounded-full-force shadow-md"
-              style={{ borderRadius: "9999px !important" }}
+              className="retry-button flex items-center gap-1 text-xs bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 text-white px-3 py-1.5 rounded-full shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" // Added focus style
               {...animationConfig.buttonAnimation}
             >
               <RefreshCw className="h-3 w-3" />
@@ -930,8 +931,7 @@ What would you like to know about the National Equidistributed Salary model?`,
     <div className="flex flex-col h-screen max-h-screen">
       {/* Header */}
       <motion.header
-        className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700/50 shadow-md backdrop-blur-sm z-10"
-        style={{ borderRadius: "0 !important" }}
+        className="flex items-center justify-between p-4 bg-gradient-to-r from-slate-800 to-slate-900 border-b border-slate-700/50 shadow-md backdrop-blur-sm z-10" // Removed inline style for borderRadius
         {...animationConfig.headerAnimation}
       >
         <motion.div
@@ -940,8 +940,7 @@ What would you like to know about the National Equidistributed Salary model?`,
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
           <motion.div
-            className="bg-gradient-to-r from-[#700936] to-[#9c1c4e] p-2 rounded-full shadow-lg"
-            style={{ borderRadius: "9999px !important" }}
+            className="bg-gradient-to-r from-[#700936] to-[#9c1c4e] p-2 rounded-full shadow-lg" // Relies on rounded-full class
             whileHover={
               prefersReducedMotion
                 ? {}
@@ -984,8 +983,7 @@ What would you like to know about the National Equidistributed Salary model?`,
               transition={{ duration: 0.3, delay: 0.2 }}
             >
               <span
-                className="text-xs px-2 py-0.5 bg-slate-700/80 text-slate-300 rounded-full shadow-inner backdrop-blur-sm"
-                style={{ borderRadius: "9999px !important" }}
+                className="text-xs px-2 py-0.5 bg-slate-700/80 text-slate-300 rounded-full shadow-inner backdrop-blur-sm" // Relies on rounded-full class
               >
                 {modelInfo}
               </span>
@@ -995,8 +993,7 @@ What would you like to know about the National Equidistributed Salary model?`,
         <div className="flex items-center gap-2">
           <motion.button
             onClick={() => setShowFavorites(true)}
-            className="flex items-center gap-1 text-sm text-slate-300 hover:text-white px-2 py-1 rounded-md hover:bg-slate-700/50 transition-colors"
-            style={{ borderRadius: "0.375rem !important" }}
+            className="flex items-center gap-1 text-sm text-slate-300 hover:text-white px-2 py-1 rounded-md hover:bg-slate-700/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" // Added focus style
             {...animationConfig.buttonAnimation}
           >
             <Star className="h-4 w-4" />
@@ -1004,8 +1001,7 @@ What would you like to know about the National Equidistributed Salary model?`,
           </motion.button>
           <motion.button
             onClick={() => setCommandPaletteOpen(true)}
-            className="flex items-center gap-1 text-sm text-slate-300 hover:text-white px-2 py-1 rounded-md hover:bg-slate-700/50 transition-colors"
-            style={{ borderRadius: "0.375rem !important" }}
+            className="flex items-center gap-1 text-sm text-slate-300 hover:text-white px-2 py-1 rounded-md hover:bg-slate-700/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" // Added focus style
             {...animationConfig.buttonAnimation}
           >
             <Command className="h-4 w-4" />
@@ -1068,14 +1064,12 @@ What would you like to know about the National Equidistributed Salary model?`,
                   transition={{ duration: 0.4, delay: 0.2 }}
                 >
                   <motion.div
-                    className="w-full p-4 rounded-lg bg-gradient-to-r from-slate-700/90 to-slate-800/90 text-white shadow-md backdrop-blur-sm border border-slate-700/50"
-                    style={{ borderRadius: "0.5rem !important" }}
+                    className="w-full p-4 rounded-lg bg-gradient-to-r from-slate-700/90 to-slate-800/90 text-white shadow-md backdrop-blur-sm border border-slate-700/50" // Uses rounded-lg
                     whileHover={{ boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.2)" }}
                   >
                     <div className="flex items-start gap-3">
                       <div
-                        className="bg-gradient-to-r from-[#700936] to-[#9c1c4e] p-2 rounded-full shadow-lg flex-shrink-0 mt-1"
-                        style={{ borderRadius: "9999px !important" }}
+                        className="bg-gradient-to-r from-[#700936] to-[#9c1c4e] p-2 rounded-full shadow-lg flex-shrink-0 mt-1" // Uses rounded-full
                       >
                         <HelpCircle className="h-5 w-5 text-white" />
                       </div>
@@ -1089,8 +1083,7 @@ What would you like to know about the National Equidistributed Salary model?`,
                           <input
                             type="text"
                             placeholder="Type your concerns here..."
-                            className="flex-1 p-2 rounded-md bg-slate-600/80 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#700936] border border-slate-600"
-                            style={{ borderRadius: "0.375rem !important" }}
+                            className="flex-1 p-2 rounded-md bg-slate-600/80 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#700936] border border-slate-600" // Uses rounded-md
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onFocus={() => {
@@ -1111,10 +1104,9 @@ What would you like to know about the National Equidistributed Salary model?`,
                             }}
                             disabled={!input.trim() || isLoading}
                             className={cn(
-                              "px-4 py-2 rounded-md bg-gradient-to-r from-[#700936] to-[#9c1c4e] text-white",
+                              "px-4 py-2 rounded-md bg-gradient-to-r from-[#700936] to-[#9c1c4e] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2", // Added focus style
                               "disabled:opacity-50 transition-all hover:shadow-lg",
                             )}
-                            style={{ borderRadius: "0.375rem !important" }}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                           >
@@ -1145,14 +1137,12 @@ What would you like to know about the National Equidistributed Salary model?`,
             transition={{ duration: 0.3 }}
           >
             <div
-              className="flex-shrink-0 bg-gradient-to-r from-[#700936] to-[#9c1c4e] p-2 rounded-full shadow-lg"
-              style={{ borderRadius: "9999px !important" }}
+              className="flex-shrink-0 bg-gradient-to-r from-[#700936] to-[#9c1c4e] p-2 rounded-full shadow-lg" // Uses rounded-full
             >
               <Bot className="h-5 w-5 text-white" />
             </div>
             <div
-              className="flex space-x-2 p-4 rounded-lg bg-gradient-to-br from-slate-700/90 to-slate-800/90 text-white max-w-[80%] shadow-md backdrop-blur-sm"
-              style={{ borderRadius: "0.5rem !important" }}
+              className="flex space-x-2 p-4 rounded-lg bg-gradient-to-br from-slate-700/90 to-slate-800/90 text-white max-w-[80%] shadow-md backdrop-blur-sm" // Uses rounded-lg
             >
               <div className="typing-indicator">
                 <motion.span
@@ -1221,13 +1211,12 @@ What would you like to know about the National Equidistributed Salary model?`,
             <Suspense
               fallback={
                 <div
-                  className="p-4 bg-slate-800/50 rounded-lg animate-pulse"
-                  style={{ borderRadius: "0.5rem !important" }}
+                  className="p-4 bg-slate-800/50 rounded-lg animate-pulse" // Uses rounded-lg
                 >
-                  <div className="h-8 w-48 bg-slate-700/50 rounded mb-4"></div>
-                  <div className="h-4 w-full bg-slate-700/50 rounded mb-2"></div>
-                  <div className="h-4 w-3/4 bg-slate-700/50 rounded mb-4"></div>
-                  <div className="h-10 w-full bg-slate-700/50 rounded"></div>
+                  <div className="h-8 w-48 bg-slate-700/50 rounded-lg mb-4"></div> {/* Added rounded-lg for consistency */}
+                  <div className="h-4 w-full bg-slate-700/50 rounded-lg mb-2"></div> {/* Added rounded-lg */}
+                  <div className="h-4 w-3/4 bg-slate-700/50 rounded-lg mb-4"></div> {/* Added rounded-lg */}
+                  <div className="h-10 w-full bg-slate-700/50 rounded-lg"></div> {/* Added rounded-lg */}
                 </div>
               }
             >
@@ -1236,8 +1225,7 @@ What would you like to know about the National Equidistributed Salary model?`,
             <div className="flex justify-end mt-2">
               <motion.button
                 onClick={() => setShowCalculator(false)}
-                className="text-sm text-slate-400 hover:text-white px-2 py-1 rounded hover:bg-slate-700/50 transition-colors"
-                style={{ borderRadius: "0.25rem !important" }}
+                className="text-sm text-slate-400 hover:text-white px-2 py-1 rounded-sm hover:bg-slate-700/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" // Added focus style
                 {...animationConfig.buttonAnimation}
               >
                 Close Calculator
@@ -1252,8 +1240,7 @@ What would you like to know about the National Equidistributed Salary model?`,
       <AnimatePresence mode="wait">
         {showScrollButton && (
           <motion.button
-            className="absolute bottom-24 right-4 p-2 bg-slate-900/80 text-slate-300 rounded-full shadow-md hover:bg-slate-800 hover:text-white transition-colors backdrop-blur-sm"
-            style={{ borderRadius: "9999px !important" }}
+            className="absolute bottom-24 right-4 p-2 bg-slate-900/80 text-slate-300 rounded-full shadow-md hover:bg-slate-800 hover:text-white transition-colors backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2" // Added focus style
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
@@ -1283,15 +1270,14 @@ What would you like to know about the National Equidistributed Salary model?`,
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask about Equidistributed Salary..."
-              className="w-full p-3 rounded-lg bg-slate-700/90 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#700936] transition-all shadow-inner backdrop-blur-sm chat-input"
-              style={{ borderRadius: "0.5rem !important" }}
+              className="w-full p-3 rounded-lg bg-slate-700/90 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#700936] transition-all shadow-inner backdrop-blur-sm chat-input" // Relies on rounded-lg class
               disabled={isLoading}
             />
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
               <motion.button
                 type="button"
                 onClick={() => setCommandPaletteOpen(true)}
-                className="text-slate-400 hover:text-white"
+                className="text-slate-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm" // Added focus style & rounded-sm for ring visibility
                 title="Open command palette (Ctrl+K)"
                 whileHover={prefersReducedMotion ? {} : { scale: 1.2, rotate: 15 }}
                 whileTap={prefersReducedMotion ? {} : { scale: 0.9 }}
@@ -1303,8 +1289,7 @@ What would you like to know about the National Equidistributed Salary model?`,
           <motion.button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="send-button p-3 rounded-lg bg-gradient-to-r from-[#700936] to-[#9c1c4e] text-white disabled:opacity-50 transition-all hover:shadow-lg"
-            style={{ borderRadius: "0.5rem !important" }}
+            className="send-button p-3 rounded-lg bg-gradient-to-r from-[#700936] to-[#9c1c4e] text-white disabled:opacity-50 transition-all hover:shadow-lg" // Relies on rounded-lg class
             {...animationConfig.buttonAnimation}
           >
             <Send className="h-5 w-5" />

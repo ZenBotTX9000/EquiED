@@ -92,44 +92,6 @@ export function checkMemoryUsage() {
   }
 }
 
-// Layout thrashing detection
-let scheduledAnimationFrame = false
-const readOperations: Array<() => any> = []
-const writeOperations: Array<(readResults?: any[]) => void> = []
-
-// Schedule DOM reads and writes to prevent layout thrashing
-export function scheduleRead(readFn: () => any) {
-  readOperations.push(readFn)
-  scheduleFlush()
-  return readFn
-}
-
-export function scheduleWrite(writeFn: (readResults?: any[]) => void) {
-  writeOperations.push(writeFn)
-  scheduleFlush()
-  return writeFn
-}
-
-function scheduleFlush() {
-  if (!scheduledAnimationFrame) {
-    scheduledAnimationFrame = true
-    requestAnimationFrame(flushOperations)
-  }
-}
-
-function flushOperations() {
-  // First, read from the DOM
-  const readResults = readOperations.map((read) => read())
-
-  // Then, batch write operations
-  writeOperations.forEach((write) => write(readResults))
-
-  // Reset
-  readOperations.length = 0
-  writeOperations.length = 0
-  scheduledAnimationFrame = false
-}
-
 // Detect device capabilities
 export function detectDeviceCapabilities() {
   const capabilities = {
@@ -161,10 +123,12 @@ export function detectDeviceCapabilities() {
   }
 
   // Check for slow connection
-  if (navigator.connection) {
-    const connection = navigator.connection as any
-    capabilities.slowConnection =
-      connection.saveData || (connection.effectiveType && ["slow-2g", "2g", "3g"].includes(connection.effectiveType))
+  if ("connection" in navigator) {
+    const connection = (navigator as any).connection; // Cast to any to access connection properties
+    if (connection) { // Ensure connection object exists
+      capabilities.slowConnection =
+        connection.saveData || (connection.effectiveType && ["slow-2g", "2g", "3g"].includes(connection.effectiveType));
+    }
   }
 
   // Determine if device is likely low performance

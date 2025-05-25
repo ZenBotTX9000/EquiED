@@ -52,45 +52,58 @@ export function setupLazyLoading() {
     const lazyLoadImages = () => {
       const lazyImages = document.querySelectorAll("img[data-src]")
 
-      lazyImages.forEach((img: HTMLImageElement) => {
-        if (isImageInViewport(img)) {
-          const dataSrc = img.getAttribute("data-src")
+      lazyImages.forEach((imgNode) => {
+        if (imgNode instanceof HTMLImageElement) { // Type check
+          const img = imgNode as HTMLImageElement; // Cast after check
+          if (isImageInViewport(img)) {
+            const dataSrc = img.getAttribute("data-src")
 
-          if (dataSrc) {
-            img.src = dataSrc
-            img.removeAttribute("data-src")
-            img.classList.add("fade-in")
+            if (dataSrc) {
+              img.src = dataSrc
+              img.removeAttribute("data-src")
+              img.classList.add("fade-in")
+            }
           }
         }
       })
 
       // If all images are loaded, remove the scroll event listener
-      if (lazyImages.length === 0) {
-        document.removeEventListener("scroll", lazyLoadThrottled)
-        window.removeEventListener("resize", lazyLoadThrottled)
-        window.removeEventListener("orientationChange", lazyLoadThrottled)
+      // Note: lazyImages.length check might be misleading here if some are not HTMLImageElement
+      // However, querySelectorAll("img[data-src]") should only return img elements.
+      // For robustness, one might filter for HTMLImageElement first.
+      if (document.querySelectorAll("img[data-src]").length === 0) { // Re-query to check if all processed
+        document.removeEventListener("scroll", lazyLoadThrottled);
+        if (typeof globalThis.window !== "undefined") {
+          const win = globalThis.window as Window;
+          win.removeEventListener("resize", lazyLoadThrottled);
+          win.removeEventListener("orientationChange", lazyLoadThrottled);
+        }
       }
     }
 
     // Throttle function to limit how often the lazy load function runs
-    const throttle = (func: Function, limit: number) => {
-      let inThrottle: boolean
+    const throttle = (func: () => void, limit: number): (() => void) => { // Improved type signature
+      let inThrottle: boolean;
       return () => {
         if (!inThrottle) {
-          func()
-          inThrottle = true
-          setTimeout(() => (inThrottle = false), limit)
+          func();
+          inThrottle = true;
+          setTimeout(() => (inThrottle = false), limit);
         }
-      }
-    }
+      };
+    };
 
     // Throttled version of lazyLoadImages
     const lazyLoadThrottled = throttle(lazyLoadImages, 200)
 
     // Add event listeners
     document.addEventListener("scroll", lazyLoadThrottled)
-    window.addEventListener("resize", lazyLoadThrottled)
-    window.addEventListener("orientationChange", lazyLoadThrottled)
+    // Using globalThis for more robust window access in potentially complex type environments
+    if (typeof globalThis.window !== "undefined") {
+      const win = globalThis.window as Window;
+      win.addEventListener("resize", lazyLoadThrottled);
+      win.addEventListener("orientationChange", lazyLoadThrottled);
+    }
 
     // Initial load
     lazyLoadImages()
